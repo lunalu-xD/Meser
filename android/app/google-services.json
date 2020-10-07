@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "105497036219",
+    "firebase_url": "https://meser-acf28.firebaseio.com",
+    "project_id": "meser-acf28",
+    "storage_bucket": "meser-acf28.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105497036219:android:095671b68f5bda65a3f09e",
+        "android_client_info": {
+          "package_name": "com.meser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "105497036219-4f0ct0mgs50vbcle6i2g0f3q170l0s7q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.meser",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "105497036219-5abbidnvu1f2jobgf1nvopg43g83tbma.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_Hvc8sjFG6jCy-f9U2r6gMVbAaZsXVpg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "105497036219-5abbidnvu1f2jobgf1nvopg43g83tbma.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
