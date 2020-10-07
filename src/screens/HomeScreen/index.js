@@ -6,25 +6,46 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from '../../redux/actions/user';
 import AsyncStorage from '@react-native-community/async-storage';
+import {user} from '../LoginScreen'
 
 const Tab = createBottomTabNavigator();
 
 function HomeScreen() {
-    const user = useSelector(state => state.user.currentUser)
     const dispatch = useDispatch();
+    const [user, setUser] = React.useState('')
 
-    const logOut = () => {
-        AsyncStorage.removeItem('user').then(
-            () => {
-                const action = signOut();
+    const logOut = async () => {
+        try {
+            await AsyncStorage.removeItem('user')
+            .then(() => {
+                let action = signOut();
                 dispatch(action);
-            }).catch(error => console.log(error))
+            })
+          } catch(e) {
+            // remove error
+          }
+        
+          console.log('Done.')
 
+    }
+
+    const test = async () => {
+        let keys = []
+        try {
+          keys = await AsyncStorage.getAllKeys()
+        } catch(e) {
+          // read key error
+        }
+      
+        console.log(keys)
+        // example console.log result:
+        // ['@MyApp_user', '@MyApp_key']
     }
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Home! {user}</Text>
-            <Button title={"Test"} onPress={() => logOut()}></Button>
+            <Text>Home! {user.id}</Text>
+            <Button title={"Đăng xuất"} onPress={() => logOut()}></Button>
+            <Button title={"Get all key"} onPress={() => test()}></Button>
         </View>
     );
 }

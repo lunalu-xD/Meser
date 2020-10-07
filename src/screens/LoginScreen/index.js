@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 export default function index({ navigation }) {
 
 
-    const [username, setUsername] = React.useState('luan');
+    const [username, setUsername] = React.useState('luan3');
     const [password, setPassword] = React.useState('123');
     const currentUser = useSelector(state => state.user.currentUser);
     const dispatch = useDispatch();
@@ -22,16 +22,30 @@ export default function index({ navigation }) {
             id: username,
             name: password,
         }
-        AsyncStorage.setItem('user', JSON.stringify(user))
-            .then(() =>
-                {
-                    let action = signIn(user)
-                    dispatch(action)
-                    console.log(user)
-                }
-               )
+        try {
+            await AsyncStorage.setItem('user', 'This is my value')
+            .then(() => {
+                let action = signIn(user)
+                dispatch(action)
+            }).catch((error) => console.log(error))
+        } catch (error) {
+            console.log(error)
+        }
+       
 
     }
+    const getAllKeys = async () => {
+        let keys = []
+        try {
+          keys = await AsyncStorage.getAllKeys()
+        } catch(e) {
+          // read key error
+        }
+      
+        console.log(keys)
+        // example console.log result:
+        // ['@MyApp_user', '@MyApp_key']
+      }
     return (
         <View style={styles.body}>
             <TextInput
@@ -45,7 +59,8 @@ export default function index({ navigation }) {
                 theme={{ colors: { background: 'white' } }}
             />
             <Button mode="contained" onPress={() => login()}>Đăng nhập</Button>
-            <Text style={{ alignSelf: 'center', marginTop: 30, color: 'blue' }} onPress={() => login()}>Đăng kí</Text>
+            <Button mode="contained" onPress={() => getAllKeys()}>Get all key</Button>
+            {/* <Text style={{ alignSelf: 'center', marginTop: 30, color: 'blue' }} onPress={() => navigation.natigate('Register')}>Đăng kí</Text> */}
         </View>
     )
 }

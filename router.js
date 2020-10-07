@@ -49,19 +49,20 @@ const Router = () => {
     const [isLoging, setIsLoging] = React.useState(true)
 
     React.useEffect(() => {
+        console.log('UseEffect trong route');
         AsyncStorage.getItem('user').then((user) => {
-            if (user) {
+            if (user) { 
+                setIsLoging(true)
                 const action = restoreUser(user);
                 dispatch(action);
                 setIsLoging(false)
             }else{
-                console.log(error)
-                setIsLoging(true)
+                setIsLoging(false)
             }
 
         }).catch((error) => console.log(error));
 
-    }, [])
+    },[])
     if(isLoging) return <ActivityIndicator size="large" color="#0000ff" style={{justifyContent: "center", alignSelf:'center'}}/>;
     //Kiểm tra user, nêu có thì đi vào màn hình home
     return (
