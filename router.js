@@ -24,7 +24,7 @@ const Stack = createStackNavigator();
 const LoginStack = () => {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}/>
             <Stack.Screen name="OTP" component={OTPScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
         </Stack.Navigator>

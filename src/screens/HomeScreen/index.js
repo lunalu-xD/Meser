@@ -8,9 +8,11 @@ import { signOut } from '../../redux/actions/user';
 import AsyncStorage from '@react-native-community/async-storage';
 import {user} from '../LoginScreen'
 
+import ChatRoomScreen from '../ChatRoomScreen'
+
 const Tab = createBottomTabNavigator();
 
-function HomeScreen() {
+function HomeScreen({navigation}) {
     const dispatch = useDispatch();
     const [user, setUser] = React.useState('')
 
@@ -45,12 +47,12 @@ function HomeScreen() {
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text>Home! {user.id}</Text>
             <Button title={"Đăng xuất"} onPress={() => logOut()}></Button>
-            <Button title={"Get all key"} onPress={() => test()}></Button>
+            <Button title={"Go to chat room"} onPress={() => navigation.navigate('ChatRoom')}></Button>
         </View>
     );
 }
 
-function SettingsScreen() {
+function SettingsScreen({navigation}) {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text>Settings!</Text>
@@ -76,8 +78,8 @@ const index = () => {
                 return <Ionicons name={iconName} size={size} color={color} />;
             },
         })}>
-            <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="Settings" component={SettingsScreen} />
+            <Tab.Screen name="Home" component={ChatRoomScreen} />
+            <Tab.Screen name="Settings" component={HomeScreen} />
         </Tab.Navigator>
     )
 }

@@ -1,47 +1,51 @@
 import React from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList } from 'react-native'
 import database from '@react-native-firebase/database'
+import { useSelector } from 'react-redux';
+import ChatLineHolder from '../../components/ChatLineHolders'
+
+
 
 export default function index() {
-
+    const user = useSelector(state => state.user.currentUser);
+    console.log(user);
     const [list, setList] = React.useState([]);
-    const userRef = database().ref('users');
+    const userRef = database().ref('chatRoom');
+
     const listRef = React.createRef();
 
-    const dataRealtimeChange = async () => {
+    const refreshChatBox = async () => {
         userRef.on('value', (snap) => {
             var items = [];
             snap.forEach((item) => {
                 let child = {
                     id: item.key,
-                    name: item.val().test,
-                    title: item.val().age,
+                    chatContent: item.val().chatContent,
                 }
                 items.push(child)
             })
             setList(items);
+            console.log(items);
         });
 
     }
 
+
     //Refresh when data changes
     React.useEffect(() => {
-        dataRealtimeChange();
+        refreshChatBox();
     }, [])
 
-    const item = ({item}) => {
-
-    }
 
     return (
         <View style={styles.container}>
             <FlatList
                 data={list}
-                renderItem={item}
+                renderItem={ ({item}) => <ChatLineHolder item={item} currentUser={user.username}/>}
                 ref={listRef}
-                onContentSizeChange={()=> listRef.current.scrollToEnd(true)}
-                            ></FlatList>
-            <InputContent />
+                onContentSizeChange={() => listRef.current.scrollToEnd(true)}
+            ></FlatList>
+            <InputContent currentUser={user}/>
         </View>
 
     )
@@ -49,28 +53,35 @@ export default function index() {
 
 
 
-const InputContent = () => {
-    const [data, setData] = React.useState('');
+const InputContent = (props) => {
+    const inputContent = React.createRef();
+
+    const currentUser = JSON.parse(props.currentUser);
+
+    const [content, setContent] = React.useState('');
+
     //push message to database 
-    async function sendMessage(data) {
-        try {
-            await database()
-                .ref('users/')
-                .push({
 
-                   
+    const _sendMessage = () => {
+        database().ref('/chatRoom').child(currentUser.id+ Date.now()).set({
+            userName: currentUser.name,
+            chatContent: content,
 
-                })
-        } catch (error) {
-            console.log(error);
-        }
+        });
+        inputContent.current.clear();
+        setContent('')
 
     }
     return (
         <View style={styles.inputContent}>
-            <TextInput placeholder={'input your test'} style={styles.inputText} onChangeText={(text) => setData(text)}></TextInput>
-            <TouchableOpacity style={styles.btnSend} onPress={() => sendMessage(data)}>
-                <Text>TExt</Text>
+            <TextInput 
+            placeholder={'input your test'} 
+            style={styles.inputText} 
+            onChangeText={(text) => setContent(text)} 
+            ref={inputContent}
+            multiline={true}></TextInput>
+            <TouchableOpacity  disabled={content.length<1} style={styles.btnSend} onPress={() => _sendMessage(content)}>
+                <Text style={{fontWeight:'bold', color:'blue', fontSize:16}}>Gửi</Text>
             </TouchableOpacity>
         </View>
     )
@@ -79,23 +90,25 @@ const InputContent = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:'white',
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        margin: "1%",
+        padding: "1%",
     },
     inputContent: {
-        backgroundColor: 'red',
-        height: 50,
+        height:'10%',
         flexDirection: 'row',
-
     },
     inputText: {
-        backgroundColor: 'yellow',
+        borderRadius:20,
+
         flex: 5,
         width: "100%",
-        height: '100%'
+        height: '100%',
+        elevation:1
     }, btnSend: {
-        backgroundColor: 'silver',
         flex: 1,
+        alignItems: 'center',
+        justifyContent:'center'
     }
 })
